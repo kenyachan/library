@@ -1,3 +1,6 @@
 :root {
     font-family: 'Roboto', sans-serif;
+
+    --lightgrey: rgb(245, 245, 245);
+    --blue: rgb(0, 115, 230);
 }
