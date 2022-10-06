@@ -4,3 +4,14 @@
     --lightgrey: rgb(245, 245, 245);
     --blue: rgb(0, 115, 230);
 }
+
+body > header {
+    background-color: var(--lightgrey);
+    padding: 1rem;
+}
+
+.logo-widget {
+    font-size: 3rem;
+    font-weight: 500;
+}
+
