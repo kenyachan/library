@@ -11,5 +11,25 @@ body {
 }
 
 main {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
+}
+
+.library-widget {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    grid-auto-rows: max-content;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-book-card {
+    grid-column: 1 2;
+    grid-row: 1 2;
 }
