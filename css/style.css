@@ -5,6 +5,12 @@
     --white: rgb(255, 255, 255);
 }
 
+
+header {
+    padding: 1rem;
+}
+
+
 .switch-widget {
     display: grid;
     grid-template-columns: auto 1fr;
