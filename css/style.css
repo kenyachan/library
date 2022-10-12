@@ -79,6 +79,9 @@ header {
 
 
 .library-widget {
+    height: 100%;
+    padding: 1rem;
+
     background-color: var(--lightgrey);
 }
 
