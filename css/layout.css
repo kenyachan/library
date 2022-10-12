@@ -3,3 +3,11 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+.library-widget {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    grid-auto-rows: max-content;
+    gap: 1rem;
+    justify-content: center;
+}

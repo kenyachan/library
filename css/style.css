@@ -2,6 +2,7 @@
     --shadowgrey: rgb(235, 235, 235);
     --lightgrey: rgb(240, 240, 240);
     --green: rgb(147, 220, 0);
+    --white: rgb(255, 255, 255);
 }
 
 .switch-widget {
@@ -70,3 +71,11 @@
     position: absolute;
 }
 
+
+.library-widget {
+    background-color: var(--lightgrey);
+}
+
+.book {
+    background-color: var(--white);
+}
