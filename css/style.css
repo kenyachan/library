@@ -1,0 +1,72 @@
+:root {
+    --shadowgrey: rgb(235, 235, 235);
+    --lightgrey: rgb(240, 240, 240);
+    --green: rgb(147, 220, 0);
+}
+
+.switch-widget {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+}
+
+.switch-widget > input[type="checkbox"] {
+    grid-column: 2 3;
+}
+
+.switch-widget > label {
+    grid-column: 1 2;
+    display: grid;
+    align-items: center;
+}
+
+.switch-widget input[type="checkbox"] {
+    appearance: none;
+    width: 46px;
+    height: 25px;
+    border-radius: 15px;
+    background-color: var(--lightgrey, rgb(240, 240, 240));
+    position: relative;
+    transition: background-color 400ms ease;
+}
+
+.switch-widget input[type="checkbox"]:checked {
+    background-color: var(--green, rgb(147, 220, 0));
+    transition: background-color 400ms ease;
+}
+
+/* slider pseudo element */
+.switch-widget input[type="checkbox"]:checked::before {
+    left: 25px;
+    transition: left 200ms;
+}
+
+.switch-widget input[type="checkbox"]::before {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 1px 1px var(--shadowgrey, rgb(235, 235, 235));
+    background-color: white;
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    transition: left 200ms;
+}
+
+.switch-widget input[type="checkbox"] ~ label .off,
+.switch-widget input[type="checkbox"]:checked ~ label .on {
+    opacity: 1;
+    transition: opacity 100ms;
+}
+
+.switch-widget input[type="checkbox"] ~ label .on,
+.switch-widget input[type="checkbox"]:checked ~ label .off {
+    opacity: 0;
+    transition: opacity 100ms;
+}
+
+.switch-widget label span {
+    position: absolute;
+}
+
