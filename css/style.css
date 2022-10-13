@@ -142,3 +142,41 @@ header {
     color: grey;
 }
 
+
+.modal-widget {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-widget .overlay {
+    backdrop-filter: blur(3px) opacity(0);
+    height: 0;
+    width: 100vw;
+
+    will-change: backdrop-filter;
+    transition: backdrop-filter .2s ease;
+}
+
+.modal-widget .overlay.active {
+    backdrop-filter: blur(3px) opacity(1);
+    height: 100vh;
+    
+    will-change: backdrop-filter;
+    transition: backdrop-filter .25s ease;
+}
+
+.modal-widget #add-book-form {
+    position: fixed;
+    bottom: 105%;
+    transition: bottom .2s ease-out;
+}
+
+.modal-widget #add-book-form.active {
+    bottom: 60vh;
+    transition: bottom .25s ease-in;
+}

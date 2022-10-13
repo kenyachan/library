@@ -12,10 +12,21 @@ function Book(title, author, pageCount) {
 
 
 const addBookButton = document.querySelector('.add-book-tile');
+const modalOverlay = document.querySelector('.modal-widget > .overlay');
+const modalForm = document.querySelector('.modal-widget > #add-book-form');
+const modalCancel = document.querySelector('.modal-widget #cancel-button');
 
-// addBookButton.addEventListener('click', );
+
+addBookButton.addEventListener('click', toggleModal);
+modalOverlay.addEventListener('click', toggleModal);
+modalCancel.addEventListener('click', toggleModal);
 
 
+
+function toggleModal() {
+    modalOverlay.classList.toggle('active');
+    modalForm.classList.toggle('active');
+}
 
 
 
