@@ -109,14 +109,14 @@ header {
     justify-content: space-between;
 
     background-color: var(--white);
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     box-shadow: 0 2px 2px 3px var(--shadowgrey);
     border-radius: 10px;
     padding: 1rem;
 }
 
 .tile:hover {
-    border: 2px solid grey;
+    border: 1px solid lightgrey;
 }
 
 .book > .book-details {
@@ -157,7 +157,7 @@ header {
 }
 
 .modal-widget #add-book-form:hover {
-    border: 2px solid transparent;
+    border: 1px solid transparent;
 }
 
 .modal-widget .overlay {
