@@ -143,6 +143,8 @@ header {
 }
 
 
+/* || Add Book Modal */
+
 .modal-widget {
     position: fixed;
     top: 0;
@@ -153,11 +155,16 @@ header {
     align-items: center;
 }
 
+.modal-widget #add-book-form:hover {
+    border: 2px solid transparent;
+}
+
 .modal-widget .overlay {
     backdrop-filter: blur(3px) opacity(0);
     height: 0;
     width: 100vw;
 
+    /* overlay entry transition */
     will-change: backdrop-filter;
     transition: backdrop-filter .2s ease;
 }
@@ -166,6 +173,7 @@ header {
     backdrop-filter: blur(3px) opacity(1);
     height: 100vh;
     
+    /* overlay exit transition */
     will-change: backdrop-filter;
     transition: backdrop-filter .25s ease;
 }
@@ -173,10 +181,16 @@ header {
 .modal-widget #add-book-form {
     position: fixed;
     bottom: 105%;
-    transition: bottom .2s ease-out;
+
+    /* form entry transition */
+    will-change: bottom;
+    transition: bottom .1s ease-out;
 }
 
 .modal-widget #add-book-form.active {
     bottom: 60vh;
-    transition: bottom .25s ease-in;
+
+    /* form exit transition */
+    will-change: bottom;
+    transition: bottom .15s ease-in;
 }
