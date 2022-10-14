@@ -1,8 +1,6 @@
 const addTestData = true;
 
-let libraryWidget = document.querySelector('.library-widget');
 let myLibrary = [];
-
 
 function Book(title, author, pageCount) {
     this.title = title;
@@ -14,28 +12,77 @@ function MyBook(read = false) {
     this.read = read;
 }
 
-const addBookButton = document.querySelector('.add-book-tile');
+const libraryWidget = document.querySelector('.library-widget');
+const addBookTile = document.querySelector('.add-book-tile');
 const modalOverlay = document.querySelector('.modal-widget > .overlay');
 const modalForm = document.querySelector('.modal-widget > #add-book-form');
 const modalCancel = document.querySelector('.modal-widget #cancel-button');
 
-addBookButton.addEventListener('click', toggleModal);
-modalOverlay.addEventListener('click', toggleModal);
-modalCancel.addEventListener('click', toggleModal);
+const addBookButton = document.querySelector('#add-book-form button#add-book');
+const readStateSwitch = document.querySelector('#add-book-form input[type="checkbox"]')
 
-modalForm.addEventListener('submit', () => alert('Form Submitted!'));
+
+addBookTile.addEventListener('click', openModal);
+modalOverlay.addEventListener('click', toggleModal);
+modalCancel.addEventListener('click', closeModal);
+
+
+addBookButton.addEventListener('click', () => {
+    addBookToLibrary();
+    closeModal();
+});
+    
+// modalForm.addEventListener('submit', () => alert('Form Submitted!'));
 
 function toggleModal() {
     modalOverlay.classList.toggle('active');
     modalForm.classList.toggle('active');
 }
 
+function openModal() {
+    modalOverlay.classList.add('active');
+    modalForm.classList.add('active');
+}
+
+function closeModal() {
+    modalOverlay.classList.remove('active');
+    modalForm.classList.remove('active');
+    modalForm.reset();
+}
 
 
+function addBookToLibrary() {
+    
+    const book = new MyBook(readStateSwitch.checked);
 
-// creates an empty book tile
+    book.title = bookTitle.value;
+    book.author = bookAuthor.value;
+    book.pageCount = Number(pageCount.value);
+
+    myLibrary.push(book);
+
+    displayBook(book);
+}
+
+
+function displayBook(book) {
+    let bookTile = createBookTile(book);
+
+    libraryWidget.insertBefore(bookTile, addBookTile.nextElementSibling);
+}
+
+function displayBooks() {
+    let reversedMyLibrary = myLibrary;
+    reversedMyLibrary = reversedMyLibrary.reverse();
+
+    reversedMyLibrary.forEach(book => {
+        displayBook(book);
+    });
+}
+
+// creates a book tile
 function createBookTile(newBook) {
-    let book = document.createElement('div');
+    let bookTile = document.createElement('div');
     let bookDetail = createBookDetails(newBook);
     let bookUserDetails = document.createElement('section'); 
     let switchWidget = createSwitchWidget(newBook.read);
@@ -44,17 +91,17 @@ function createBookTile(newBook) {
     deleteButton.setAttribute('type', 'button');
     deleteButton.textContent = 'Delete';
 
-    book.classList.add('tile');
-    book.classList.add('book');
+    bookTile.classList.add('tile');
+    bookTile.classList.add('book');
     bookUserDetails.classList.add('book-user-details');
 
     bookUserDetails.appendChild(switchWidget);
     bookUserDetails.appendChild(deleteButton);
 
-    book.appendChild(bookDetail);
-    book.appendChild(bookUserDetails);
+    bookTile.appendChild(bookDetail);
+    bookTile.appendChild(bookUserDetails);
     
-    return book;
+    return bookTile;
 }
 
 function createBookDetails(book) {
@@ -110,15 +157,11 @@ function createSwitchWidget(switchState = false) {
 
 
 
-
 // Tests
 
 if (addTestData === true) {
     addTestBooks();
- 
-    myLibrary.forEach((book) => {
-        libraryWidget.appendChild(createBookTile(book));
-    });
+    displayBooks();
 }
 
 function addTestBooks() {
