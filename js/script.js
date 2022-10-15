@@ -10,7 +10,10 @@ function Book(title, author, pageCount) {
 
 function MyBook(read = false) {
     this.read = read;
+    this.id = -1;
 }
+
+
 
 const libraryWidget = document.querySelector('.library-widget');
 const addBookTile = document.querySelector('.add-book-tile');
@@ -55,10 +58,11 @@ function addBookToLibrary() {
     
     const book = new MyBook(readStateSwitch.checked);
 
+    book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
     book.title = bookTitle.value;
     book.author = bookAuthor.value;
     book.pageCount = Number(pageCount.value);
-
+    
     myLibrary.push(book);
 
     displayBook(book);
@@ -68,11 +72,23 @@ function addBookToLibrary() {
 function displayBook(book) {
     let bookTile = createBookTile(book);
 
+    bookTile.dataset.index = book.id;
+
+    let deleteButton = bookTile.querySelector('.book-user-details > button');
+
+    deleteButton.addEventListener('click', () => {
+        let index = myLibrary.map(book => book.id).indexOf(Number(bookTile.dataset.index));
+
+        myLibrary.splice(index, 1);
+        libraryWidget.removeChild(bookTile);
+
+    });
+
     libraryWidget.insertBefore(bookTile, addBookTile.nextElementSibling);
 }
 
 function displayBooks() {
-    let reversedMyLibrary = myLibrary;
+    let reversedMyLibrary = myLibrary.map(obj => ({...obj}));
     reversedMyLibrary = reversedMyLibrary.reverse();
 
     reversedMyLibrary.forEach(book => {
@@ -91,6 +107,7 @@ function createBookTile(newBook) {
     deleteButton.setAttribute('type', 'button');
     deleteButton.textContent = 'Delete';
 
+    deleteButton.classList.add('delete-button');
     bookTile.classList.add('tile');
     bookTile.classList.add('book');
     bookUserDetails.classList.add('book-user-details');
@@ -177,13 +194,14 @@ function addTestBooks() {
 
     let hpAuthor = "J.K. Rowling";
     
-    for (let i = 0; i < 7; i++) {
+    bookTitles.forEach(title => {
         let book = new MyBook(true);
 
-        book.title = bookTitles[i];
+        book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
+        book.title = title;
         book.author = hpAuthor;
         book.pageCount = 250;
-        
+
         myLibrary.push(book);
-    }
+    });
 }
