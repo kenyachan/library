@@ -13,6 +13,10 @@ function MyBook(read = false) {
     this.id = -1;
 }
 
+MyBook.prototype.toggleReadStatus = function () {
+    console.log("toggling read status!");
+};
+
 
 
 const libraryWidget = document.querySelector('.library-widget');
@@ -31,7 +35,8 @@ modalCancel.addEventListener('click', closeModal);
 
 
 addBookButton.addEventListener('click', () => {
-    addBookToLibrary();
+    let book = addBookToLibrary();
+    displayBook(book);
     closeModal();
 });
     
@@ -55,7 +60,6 @@ function closeModal() {
 
 
 function addBookToLibrary() {
-    
     const book = new MyBook(readStateSwitch.checked);
 
     book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
@@ -65,7 +69,7 @@ function addBookToLibrary() {
     
     myLibrary.push(book);
 
-    displayBook(book);
+    return book;
 }
 
 
@@ -157,8 +161,8 @@ function createSwitchWidget(switchState = false) {
 
     toggleSwitch.setAttribute('type', 'checkbox');
     toggleSwitch.setAttribute('name', 'readBook');
-    if (switchState === true)
-        toggleSwitch.setAttribute('checked', true);
+    toggleSwitch.checked = switchState;
+
 
     switchWidget.appendChild(toggleSwitch);
     switchWidget.appendChild(switchLabel);
