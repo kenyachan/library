@@ -13,10 +13,11 @@ function MyBook(read = false) {
     this.id = -1;
 }
 
-MyBook.prototype.toggleReadStatus = function () {
-    console.log("toggling read status!");
-};
+MyBook.prototype = Object.create(Book.prototype);
 
+MyBook.prototype.toggleReadStatus = function () {
+    this.read = this.read === true ? false : true;
+};
 
 
 const libraryWidget = document.querySelector('.library-widget');
@@ -39,8 +40,6 @@ addBookButton.addEventListener('click', () => {
     displayBook(book);
     closeModal();
 });
-    
-// modalForm.addEventListener('submit', () => alert('Form Submitted!'));
 
 function toggleModal() {
     modalOverlay.classList.toggle('active');
@@ -79,6 +78,7 @@ function displayBook(book) {
     bookTile.dataset.index = book.id;
 
     let deleteButton = bookTile.querySelector('.book-user-details > button');
+    let readStateSwitch = bookTile.querySelector('.book .switch-widget input[type="checkbox"]');
 
     deleteButton.addEventListener('click', () => {
         let index = myLibrary.map(book => book.id).indexOf(Number(bookTile.dataset.index));
@@ -86,6 +86,12 @@ function displayBook(book) {
         myLibrary.splice(index, 1);
         libraryWidget.removeChild(bookTile);
 
+    });
+
+    readStateSwitch.addEventListener('change', () => {
+        let index = myLibrary.map(book => book.id).indexOf(Number(bookTile.dataset.index));
+
+        myLibrary[index].toggleReadStatus();
     });
 
     libraryWidget.insertBefore(bookTile, addBookTile.nextElementSibling);
