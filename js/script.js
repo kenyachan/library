@@ -19,43 +19,53 @@ MyBook.prototype.toggleReadStatus = function () {
     this.read = this.read === true ? false : true;
 };
 
+const modal = (() => {
+    const _overlay = document.querySelector('.modal-widget > .overlay');
+    const _form = document.querySelector('.modal-widget > #add-book-form');
+    const _cancelButton = document.querySelector('.modal-widget #cancel-button');
+
+    const toggle = () => {
+        _overlay.classList.toggle('active');
+        _form.classList.toggle('active');
+    };
+
+    const open = () => {
+        _overlay.classList.add('active');
+        _form.classList.add('active');
+    };
+
+    const close = () => {
+        _overlay.classList.remove('active');
+        _form.classList.remove('active');
+        _form.reset();
+    };
+
+    // bind events
+    _overlay.addEventListener('click', toggle);
+    _cancelButton.addEventListener('click', close);
+
+    // public API
+    return {
+        toggle, open, close,
+    };
+})();
+
 
 const libraryWidget = document.querySelector('.library-widget');
 const addBookTile = document.querySelector('.add-book-tile');
-const modalOverlay = document.querySelector('.modal-widget > .overlay');
-const modalForm = document.querySelector('.modal-widget > #add-book-form');
-const modalCancel = document.querySelector('.modal-widget #cancel-button');
 
 const addBookButton = document.querySelector('#add-book-form button#add-book');
 const readStateSwitch = document.querySelector('#add-book-form input[type="checkbox"]')
 
 
-addBookTile.addEventListener('click', openModal);
-modalOverlay.addEventListener('click', toggleModal);
-modalCancel.addEventListener('click', closeModal);
+addBookTile.addEventListener('click', () => modal.open());
 
 
 addBookButton.addEventListener('click', () => {
     let book = addBookToLibrary();
     displayBook(book);
-    closeModal();
+    modal.close();
 });
-
-function toggleModal() {
-    modalOverlay.classList.toggle('active');
-    modalForm.classList.toggle('active');
-}
-
-function openModal() {
-    modalOverlay.classList.add('active');
-    modalForm.classList.add('active');
-}
-
-function closeModal() {
-    modalOverlay.classList.remove('active');
-    modalForm.classList.remove('active');
-    modalForm.reset();
-}
 
 
 function addBookToLibrary() {
