@@ -1,16 +1,14 @@
 const addTestData = true;
 
-let myLibrary = [];
-
 function Book(title, author, pageCount) {
     this.title = title;
     this.author = author;
     this.pageCount = pageCount;
 }
 
+// change MyBook to LibraryBook
 function MyBook(read = false) {
     this.read = read;
-    this.id = -1;
 }
 
 MyBook.prototype = Object.create(Book.prototype);
@@ -19,10 +17,34 @@ MyBook.prototype.toggleReadStatus = function () {
     this.read = this.read === true ? false : true;
 };
 
-const modal = (() => {
+const addBookForm = (() => {
     const _overlay = document.querySelector('.modal-widget > .overlay');
     const _form = document.querySelector('.modal-widget > #add-book-form');
     const _cancelButton = document.querySelector('.modal-widget #cancel-button');
+    const _addBookButton = document.querySelector('.modal-widget button#add-book');
+    const _readStateSwitch = document.querySelector('#add-book-form input[type="checkbox"]')
+    const _addBookTile = document.querySelector('.add-book-tile');
+
+    const _addBookToLibrary = () => {
+        let newBook = _createBook();
+        
+        // change this to emit an event and use mediator
+        library.add(newBook); 
+        close();
+    }
+
+    const _createBook = () => {
+        const _book = new MyBook(_readStateSwitch.checked);
+
+        // _book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
+
+        _book.title = bookTitle.value;
+        _book.author = bookAuthor.value;
+        _book.pageCount = Number(pageCount.value);
+        _book.read = _readStateSwitch.checked;
+
+        return _book;
+    }
 
     const toggle = () => {
         _overlay.classList.toggle('active');
@@ -43,6 +65,8 @@ const modal = (() => {
     // bind events
     _overlay.addEventListener('click', toggle);
     _cancelButton.addEventListener('click', close);
+    _addBookButton.addEventListener('click', _addBookToLibrary);
+    _addBookTile.addEventListener('click', open);
 
     // public API
     return {
@@ -51,154 +75,135 @@ const modal = (() => {
 })();
 
 
-const libraryWidget = document.querySelector('.library-widget');
-const addBookTile = document.querySelector('.add-book-tile');
+const library = (() => {
+    const _library = [];
 
-const addBookButton = document.querySelector('#add-book-form button#add-book');
-const readStateSwitch = document.querySelector('#add-book-form input[type="checkbox"]')
-
-
-addBookTile.addEventListener('click', () => modal.open());
-
-
-addBookButton.addEventListener('click', () => {
-    let book = addBookToLibrary();
-    displayBook(book);
-    modal.close();
-});
-
-
-function addBookToLibrary() {
-    const book = new MyBook(readStateSwitch.checked);
-
-    book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
-    book.title = bookTitle.value;
-    book.author = bookAuthor.value;
-    book.pageCount = Number(pageCount.value);
+    const _libraryWidget = document.querySelector('.library-widget');
+    const _addBookTile = document.querySelector('.add-book-tile');
     
-    myLibrary.push(book);
 
-    return book;
-}
+    const add = (book) => {
+        _library.push(book);
+        _render(book);
+    }
 
+    const remove = (book) => {
+        _library.splice(_library.indexOf(book), 1);
+        
+        // remove book from library
+        // remove book from 'display'?
+    }
 
-function displayBook(book) {
-    let bookTile = createBookTile(book);
+    const _render = (book) => {
+        let bookTile = _createBookTile(book);
 
-    bookTile.dataset.index = book.id;
+        let deleteButton = bookTile.querySelector('.book-user-details > button');
+        let readStateSwitch = bookTile.querySelector('.book .switch-widget input[type="checkbox"]');
 
-    let deleteButton = bookTile.querySelector('.book-user-details > button');
-    let readStateSwitch = bookTile.querySelector('.book .switch-widget input[type="checkbox"]');
+        deleteButton.addEventListener('click', (event) => {
+            _library.splice(_library.indexOf(book), 1);
+            event.target.closest('.tile.book').remove();
+        });
 
-    deleteButton.addEventListener('click', () => {
-        let index = myLibrary.map(book => book.id).indexOf(Number(bookTile.dataset.index));
+        readStateSwitch.addEventListener('change', (event) => {
+            book.read = event.target.checked;
+            console.log(book);
+            console.log(_library);
+        });
 
-        myLibrary.splice(index, 1);
-        libraryWidget.removeChild(bookTile);
+        _libraryWidget.insertBefore(bookTile, _addBookTile.nextElementSibling);
+    }
 
-    });
-
-    readStateSwitch.addEventListener('change', () => {
-        let index = myLibrary.map(book => book.id).indexOf(Number(bookTile.dataset.index));
-
-        myLibrary[index].toggleReadStatus();
-    });
-
-    libraryWidget.insertBefore(bookTile, addBookTile.nextElementSibling);
-}
-
-function displayBooks() {
-    let reversedMyLibrary = myLibrary.map(obj => ({...obj}));
-    reversedMyLibrary = reversedMyLibrary.reverse();
-
-    reversedMyLibrary.forEach(book => {
-        displayBook(book);
-    });
-}
-
-// creates a book tile
-function createBookTile(newBook) {
-    let bookTile = document.createElement('div');
-    let bookDetail = createBookDetails(newBook);
-    let bookUserDetails = document.createElement('section'); 
-    let switchWidget = createSwitchWidget(newBook.read);
-    let deleteButton = document.createElement('button');
+    const _createBookTile = (book) => {
+        let bookTile = document.createElement('div');
+        let bookDetail = _createBookDetails(book);
+        let bookUserDetails = document.createElement('section'); 
+        let switchWidget = _createSwitchWidget(book.read);
+        let deleteButton = document.createElement('button');
+        
+        deleteButton.setAttribute('type', 'button');
+        deleteButton.textContent = 'Delete';
     
-    deleteButton.setAttribute('type', 'button');
-    deleteButton.textContent = 'Delete';
-
-    deleteButton.classList.add('delete-button');
-    bookTile.classList.add('tile');
-    bookTile.classList.add('book');
-    bookUserDetails.classList.add('book-user-details');
-
-    bookUserDetails.appendChild(switchWidget);
-    bookUserDetails.appendChild(deleteButton);
-
-    bookTile.appendChild(bookDetail);
-    bookTile.appendChild(bookUserDetails);
+        deleteButton.classList.add('delete-button');
+        bookTile.classList.add('tile');
+        bookTile.classList.add('book');
+        bookUserDetails.classList.add('book-user-details');
     
-    return bookTile;
-}
-
-function createBookDetails(book) {
-    let bookDetail = document.createElement('section');
+        bookUserDetails.appendChild(switchWidget);
+        bookUserDetails.appendChild(deleteButton);
     
-    let title = document.createElement('p');
-    let author = document.createElement('p');
-    let pageCount = document.createElement('p');
+        bookTile.appendChild(bookDetail);
+        bookTile.appendChild(bookUserDetails);
+        
+        return bookTile;
+    }
+    
+    const _createBookDetails = (book) => {
+        let bookDetail = document.createElement('section');
+        
+        let title = document.createElement('p');
+        let author = document.createElement('p');
+        let pageCount = document.createElement('p');
+    
+        bookDetail.classList.add('book-details');
+        title.classList.add('book-title');
+        author.classList.add('book-author');
+        pageCount.classList.add('book-page-count');
+    
+        bookDetail.appendChild(title);
+        bookDetail.appendChild(author);
+        bookDetail.appendChild(pageCount);
+    
+        title.textContent = book.title;
+        author.textContent = book.author;
+        pageCount.textContent = book.pageCount;
+    
+        return bookDetail;
+    }
+    
+    const _createSwitchWidget = (switchState = false) => {
+        let switchWidget = document.createElement('div');
+        let toggleSwitch = document.createElement('input');
+        let switchLabel = document.createElement('label');
+        let switchLabelOn = document.createElement('span');
+        let switchLabelOff = document.createElement('span');
+    
+        switchWidget.classList.add('switch-widget');
+        switchLabelOff.classList.add('off');
+        switchLabelOn.classList.add('on');
+    
+        toggleSwitch.setAttribute('type', 'checkbox');
+        toggleSwitch.setAttribute('name', 'readBook');
+        toggleSwitch.checked = switchState;
+    
+    
+        switchWidget.appendChild(toggleSwitch);
+        switchWidget.appendChild(switchLabel);
+    
+        switchLabel.appendChild(switchLabelOn);
+        switchLabel.appendChild(switchLabelOff);
+    
+        switchLabelOn.textContent = 'Read';
+        switchLabelOff.textContent = 'Not Read';
+    
+        return switchWidget;
+    }
 
-    bookDetail.classList.add('book-details');
-    title.classList.add('book-title');
-    author.classList.add('book-author');
-    pageCount.classList.add('book-page-count');
+    // Change this to emit an event for a mediator to pick up?
+    _addBookTile.addEventListener('click', () => addBookForm.open());
 
-    bookDetail.appendChild(title);
-    bookDetail.appendChild(author);
-    bookDetail.appendChild(pageCount);
+    return {
+        add, remove,
+    }
 
-    title.textContent = book.title;
-    author.textContent = book.author;
-    pageCount.textContent = book.pageCount;
-
-    return bookDetail;
-}
-
-function createSwitchWidget(switchState = false) {
-    let switchWidget = document.createElement('div');
-    let toggleSwitch = document.createElement('input');
-    let switchLabel = document.createElement('label');
-    let switchLabelOn = document.createElement('span');
-    let switchLabelOff = document.createElement('span');
-
-    switchWidget.classList.add('switch-widget');
-    switchLabelOff.classList.add('off');
-    switchLabelOn.classList.add('on');
-
-    toggleSwitch.setAttribute('type', 'checkbox');
-    toggleSwitch.setAttribute('name', 'readBook');
-    toggleSwitch.checked = switchState;
-
-
-    switchWidget.appendChild(toggleSwitch);
-    switchWidget.appendChild(switchLabel);
-
-    switchLabel.appendChild(switchLabelOn);
-    switchLabel.appendChild(switchLabelOff);
-
-    switchLabelOn.textContent = 'Read';
-    switchLabelOff.textContent = 'Not Read';
-
-    return switchWidget;
-}
-
+})();
 
 
 // Tests
 
 if (addTestData === true) {
     addTestBooks();
-    displayBooks();
+    // displayBooks();
 }
 
 function addTestBooks() {
@@ -217,11 +222,11 @@ function addTestBooks() {
     bookTitles.forEach(title => {
         let book = new MyBook(true);
 
-        book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
+        // book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
         book.title = title;
         book.author = hpAuthor;
         book.pageCount = 250;
 
-        myLibrary.push(book);
+        library.add(book);
     });
 }
