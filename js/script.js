@@ -1,21 +1,40 @@
 const addTestData = true;
 
-function Book(title, author, pageCount) {
-    this.title = title;
-    this.author = author;
-    this.pageCount = pageCount;
+class Book {
+    constructor(title, author, pageCount) {
+        this.title = title;
+        this.author = author;
+        this.pageCount = pageCount;
+    }
 }
+
+class LibraryBook extends Book {
+    constructor(read = false) {
+        super();
+        this.read = read;
+    }
+
+    toggleReadStatus = () => {
+        this.read = this.read === true ? false : true;
+    }
+}
+
+// function Book(title, author, pageCount) {
+//     this.title = title;
+//     this.author = author;
+//     this.pageCount = pageCount;
+// }
 
 // change MyBook to LibraryBook
-function MyBook(read = false) {
-    this.read = read;
-}
+// function LibraryBook(read = false) {
+//     this.read = read;
+// }
 
-MyBook.prototype = Object.create(Book.prototype);
+// LibraryBook.prototype = Object.create(Book.prototype);
 
-MyBook.prototype.toggleReadStatus = function () {
-    this.read = this.read === true ? false : true;
-};
+// LibraryBook.prototype.toggleReadStatus = function () {
+//     this.read = this.read === true ? false : true;
+// };
 
 const addBookForm = (() => {
     const _overlay = document.querySelector('.modal-widget > .overlay');
@@ -34,7 +53,7 @@ const addBookForm = (() => {
     }
 
     const _createBook = () => {
-        const _book = new MyBook(_readStateSwitch.checked);
+        const _book = new LibraryBook(_readStateSwitch.checked);
 
         // _book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
 
@@ -220,7 +239,7 @@ function addTestBooks() {
     let hpAuthor = "J.K. Rowling";
     
     bookTitles.forEach(title => {
-        let book = new MyBook(true);
+        let book = new LibraryBook(true);
 
         // book.id = myLibrary.length === 0 ? 0 : myLibrary[myLibrary.length - 1].id + 1;
         book.title = title;
