@@ -7,7 +7,7 @@ module.exports = {
 	devServer: {
 		static: './dist',
 	},
-	devtool: 'inline-srouce-map',
+	devtool: 'inline-source-map',
 	plugins: [
 		new HtmlWebpackPlugin({
 			title: 'library',
