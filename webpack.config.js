@@ -6,6 +6,7 @@ module.exports = {
 	devServer: {
 		static: './dist',
 	},
+	devtool: 'inline-srouce-map',
 	plugins: [
 		new HtmlWebpackPlugin({
 			title: 'library',
