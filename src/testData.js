@@ -5,10 +5,14 @@ const bookList = ["Harry Potter and the Philosopher's Stone", "Harry Potter and 
 const pageCounts = [309, 341, 435, 734, 870, 652, 759];
 
 export function createTestData(app) {
+	console.log('Creating test data...');
+
 	bookList.forEach(title => {
-		let book = newBook(title, 'J.K Rowling', pageCounts[bookList.indexOf(title)]);
+		let book = newBook(title, 'J.K Rowling', pageCounts[bookList.indexOf(title)], false);
 
 		app.add(book);
 	});
+
+	console.log('Test data created!');
 }
 
