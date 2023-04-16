@@ -49,23 +49,23 @@ export const screenController = (application) => {
 		function openModal(book, bookTile) {
 			let type = book === undefined ? 'add' : 'update';
 			
-			//console.log(`Opening ${type} Modal`);
-			
 			const modalElement = create.modifyBookModal(type);
 			bodyElement.appendChild(modalElement);
 
 			document.addEventListener('keydown', e => {
 				if (event.key === 'Escape')
-					closeModal(modalElement);
+					closeModal();
 			}, { once: true });
 
 			initialiseOverlay(modalElement);
-			initialiseCancelButton(modalElement);
+
+			const form = modalElement.querySelector('form');
+			initialiseCancelButton(form);
 			
-			if (type === 'add')	initialiseAddForm(modalElement);
+			if (type === 'add')	initialiseAddForm(form);
 			if (type === 'update') {
-				initialiseRemoveButton(modalElement, book, bookTile);
-				initialiseUpdateForm(modalElement, book, bookTile);
+				initialiseRemoveButton(form, book, bookTile);
+				initialiseUpdateForm(form, book, bookTile);
 			}
 
 			return modalElement;
@@ -73,7 +73,7 @@ export const screenController = (application) => {
 
 		function initialiseOverlay(modalElement) {
 			const overlay = modalElement.querySelector('.overlay');
-			overlay.addEventListener('click', e => closeModal(modalElement));
+			overlay.addEventListener('click', e => closeModal());
 		}
 
 		function initialiseRemoveButton(modalElement, book, bookTile) {
@@ -82,22 +82,26 @@ export const screenController = (application) => {
 			removeButton.addEventListener('click', e => {
 				library.remove(book);
 				bookTile.remove();
-				closeModal(modalElement);
+				closeModal();
 			});
 		}
 
-		function initialiseCancelButton(modalElement) {
-			const cancelButton = modalElement.querySelector('#modal-cancel');
-			cancelButton.addEventListener('click', e => closeModal(modalElement));
+		function initialiseCancelButton(form) {
+			const cancelButton = form.querySelector('#modal-cancel');
+			cancelButton.addEventListener('click', e => closeModal());
 		}
 
-		function initialiseAddForm(modalElement) {
-			const form = modalElement.querySelector('form');
+		function initialiseAddForm(form) {
+			const titleInput = form.querySelector('input[name="bookTitle"]');
+
+			addValidationMessages(form);
+			titleInput.focus();
 
 			form.addEventListener('submit', e => {
 				e.preventDefault(); // stop submit action
+
 				addBook(form);
-				closeModal(modalElement);
+				closeModal();
 			});
 		}
 
@@ -114,9 +118,7 @@ export const screenController = (application) => {
 			insertBookTile(newBookTile);
 		}
 
-		function initialiseUpdateForm(modalElement, bookObj, bookTile) {
-			const form = modalElement.querySelector('form');
-
+		function initialiseUpdateForm(form, bookObj, bookTile) {
 			const titleInput = form.querySelector('input[name="bookTitle"]');
 			const authorInput = form.querySelector('input[name="bookAuthor"]');
 			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
@@ -127,6 +129,8 @@ export const screenController = (application) => {
 			pageCountInput.value = bookObj.pageCount;
 			readStatusCheckBox.checked = bookObj.read;
 
+			addValidationMessages(form);
+
 			form.addEventListener('submit', e => {
 				e.preventDefault();
 				
@@ -136,7 +140,7 @@ export const screenController = (application) => {
 				let updatedBookTile = createBookTile(bookObj);
 				bookTile.replaceWith(updatedBookTile);
 
-				closeModal(modalElement);
+				closeModal();
 			});
 		}
 		
@@ -160,8 +164,63 @@ export const screenController = (application) => {
 			return bookDelta;
 		}
 
-		function closeModal(modalElement) {
-			modalElement.remove();
+		function addValidationMessages(form) {
+			const titleInput = form.querySelector('input[name="bookTitle"]');
+			const authorInput = form.querySelector('input[name="bookAuthor"]');
+			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
+
+			addTitleValidationMessage(titleInput);
+			addAuthorValidationMessage(authorInput);
+			addPageCountValidationMessage(pageCountInput);
+		}
+
+		function addTitleValidationMessage(titleInput) {
+			if (titleInput.value === undefined) 
+				titleInput.setCustomValidity('Please enter the book title.');
+
+			titleInput.addEventListener('input', event => {
+				if (titleInput.validity.valueMissing) {
+					titleInput.setCustomValidity('Please enter the book title.');
+				} else {
+					titleInput.setCustomValidity('');
+				}
+			});
+		}
+
+		function addAuthorValidationMessage(authorInput) {
+			if (authorInput.value === undefined)
+				authorInput.setCustomValidity('Please enter an author.');
+
+			authorInput.addEventListener('input', event => {
+				if (authorInput.validity.valueMissing) {
+					authorInput.setCustomValidity('Please enter an author.');
+				} else if (authorInput.validity.patternMismatch) {
+					authorInput.setCustomValidity('Author name cannot contain numbers.');
+				} else {
+					authorInput.setCustomValidity('');
+				}
+			});
+		}
+
+		function addPageCountValidationMessage(pageCountInput) {
+			if (pageCountInput.value === undefined)
+				pageCountInput.setCustomValidity('Please enter the number of pages.');
+
+			pageCountInput.addEventListener('input', event => {
+				if (pageCountInput.validity.valueMissing) {
+					pageCountInput.setCustomValidity('Please enter the number of pages.');
+				} else if (pageCountInput.validity.rangeUnderflow) {
+					pageCountInput.setCustomValidity('Please enter a number greater than 0.');
+				} else {
+					pageCountInput.setCustomValidity('');
+				}
+			});
+		}
+
+		function closeModal() {
+			const modalElement = bodyElement.querySelector('.modal-widget');
+
+			if (modalElement) modalElement.remove();
 		}
 	})();
 

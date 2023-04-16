@@ -169,6 +169,7 @@ export const modifyBookModal = (type) => {
 		input.setAttribute('placeholder', 'J.K Rowling');
 		input.id = 'bookAuthor';
 		input.required = true;
+		input.setAttribute('pattern', '[^0-9]+');
 		element.appendChild(input);
 
 		return element;
@@ -186,7 +187,8 @@ export const modifyBookModal = (type) => {
 		const input = document.createElement('input');
 		input.setAttribute('type', 'number');
 		input.setAttribute('name', 'bookPageCount');
-		input.setAttribute('placeholder', '123');
+		input.setAttribute('placeholder', '256');
+		input.setAttribute('min', '1');
 		input.id = 'bookPageCount';
 		input.required = 'required';
 		element.appendChild(input);
