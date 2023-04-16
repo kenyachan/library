@@ -1,11 +1,10 @@
-export function book(title, author, pageCount) {
-
-	const printDetails = () => {
-		console.log(`title: "${title}", author: "${author}", pageCount: ${pageCount}`);
+export function book(title, author, pageCount, read) {
+	const getDetails = () => {
+		return `Title: "${title}", Author: "${author}", Page Count: ${pageCount}`;
 	}
 
 	return {
-		printDetails,
+		getDetails,
 
 		get title() {
 			return title;
@@ -17,6 +16,10 @@ export function book(title, author, pageCount) {
 
 		get pageCount() {
 			return pageCount;
+		},
+
+		get read() {
+			return read;
 		},
 
 		set title(newTitle) {
@@ -34,11 +37,21 @@ export function book(title, author, pageCount) {
 		},
 
 		set pageCount(newPageCount) {
-			if (typeof newPageCount !== 'number') return;
-			if (newPageCount <= 0) throw new Error(`Page Count invalid. Expected positive number, recieved ${newPageCount}`);
+			if (typeof newPageCount !== 'number' && newPageCount !== undefined) {
+				throw new Error(`Page Count invalid. Expected 'number', received ${typeof newPageCount}`);
+				return;
+			}
+
+			if (newPageCount <= 0)  {
+				throw new Error(`Page Count invalid. Expected positive number, recieved ${newPageCount}`);
+				return;
+			}
 
 			pageCount = newPageCount;
 		},
 
+		set read(readStatus) {
+			read = readStatus;
+		},
 	}
 }
