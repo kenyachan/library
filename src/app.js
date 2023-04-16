@@ -9,7 +9,8 @@ export function library() {
 			throw new Error(`Book with title "${book.title}" already exists in library.`);
 
 		bookCollection.push(book);
-		console.log(`"${book.title}" added to library.`);
+
+		console.log(`Book added to library. ${book.getDetails()}`);
 	}
 	
 	const remove = (book) => {
@@ -18,7 +19,32 @@ export function library() {
 		if (bookIndex < 0) return;
 
 		bookCollection.splice(bookIndex, 1);
-		console.log(`Book "${book.title}" removed from library`);
+
+		console.log(`Book removed from library. ${book.getDetails()}`);
+	}
+
+	const update = (book, delta) => {
+		if (delta.title !== undefined) {
+			console.log(`Updating title "${book.title}" to "${delta.title}"`);
+			book.title = delta.title;
+		}
+
+		if (delta.author !== undefined) {
+			console.log(`Updating author "${book.author}" to "${delta.author}"`);
+			book.author = delta.author;
+		}
+
+		if (delta.pageCount !== undefined) {
+			console.log(`Updating page count "${book.pageCount}" to "${delta.pageCount}"`);
+			book.pageCount = delta.pageCount;
+		}
+
+		if (delta.read !== undefined) {
+			console.log(`Updating book read status "${book.read}" to "${delta.read}"`);
+			book.read = delta.read;
+		}
+
+		// storage.save
 	}
 
 	const printCollection = () => {
@@ -38,6 +64,7 @@ export function library() {
 	return {
 		add,
 		remove,
+		update,
 		printCollection,
 		getBookCollection,
 	}
