@@ -10,7 +10,5 @@ export function getLibrary() {
 		Object.assign(newBook(), book)
 	);
 
-	console.log(bookCollection);
-
 	return bookCollection;
 }
