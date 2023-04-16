@@ -1,14 +1,18 @@
 import { book as newBook } from './modules/book';
+import * as storage from './modules/storage';
 
 //app controller
 export function library() {
-	const bookCollection = [];
+	let bookCollection = [];
+
+	bookCollection = storage.getLibrary();
 
 	const add = (book) => {
 		if (bookCollection.some(b => b.title === book.title))
 			throw new Error(`Book with title "${book.title}" already exists in library.`);
 
 		bookCollection.push(book);
+		storage.saveLibrary(bookCollection);
 
 		console.log(`Book added to library. ${book.getDetails()}`);
 	}
@@ -19,6 +23,7 @@ export function library() {
 		if (bookIndex < 0) return;
 
 		bookCollection.splice(bookIndex, 1);
+		storage.saveLibrary(bookCollection);
 
 		console.log(`Book removed from library. ${book.getDetails()}`);
 	}
@@ -44,7 +49,7 @@ export function library() {
 			book.read = delta.read;
 		}
 
-		// storage.save
+		storage.saveLibrary(bookCollection);
 	}
 
 	const printCollection = () => {

@@ -4,7 +4,7 @@ import { library } from './app';
 import { createTestData } from './testData';
 
 let app = library();
-createTestData(app);
+//createTestData(app);
 
 let sc = screenController(app);
 
