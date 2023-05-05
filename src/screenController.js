@@ -3,16 +3,12 @@ import { book } from './modules/book';
 
 export const screenController = (application) => {
 	const library = application;
+	const mainElement = document.querySelector('main');
 	const bodyElement = document.querySelector('body');
-
-	const header = (() => {
-		const headerElement = create.headerElement();
-		bodyElement.appendChild(headerElement);
-	})();
 
 	const main = (() => {
 		const libraryElement = create.libraryElement();
-		bodyElement.appendChild(libraryElement);
+		mainElement.replaceWith(libraryElement);
 
 		const addBookButton = libraryElement.querySelector('.tile.addButton');
 		addBookButton.addEventListener('click', e => openModal());
@@ -222,10 +218,5 @@ export const screenController = (application) => {
 
 			if (modalElement) modalElement.remove();
 		}
-	})();
-
-	const footer = (() => {
-		const footerElement = create.footerElement();
-		bodyElement.appendChild(footerElement);
 	})();
 }
