@@ -1,66 +1,66 @@
-export const headerElement = () => {
-	const element = document.createElement('header');
+// export const headerElement = () => {
+// 	const element = document.createElement('header');
 
-	const page = document.createElement('div');
-	page.classList.add('page');
-	element.appendChild(page);
+// 	const page = document.createElement('div');
+// 	page.classList.add('page');
+// 	element.appendChild(page);
 
-	const headerTitle = document.createElement('p');
-	headerTitle.textContent = 'My Library';
-	headerTitle.classList.add('header-title');
-	page.appendChild(headerTitle);
+// 	const headerTitle = document.createElement('p');
+// 	headerTitle.textContent = 'My Library';
+// 	headerTitle.classList.add('header-title');
+// 	page.appendChild(headerTitle);
 
-	const headerTagline = document.createElement('p');
-	headerTagline.textContent = 'Books I have read and planned to read';
-	headerTagline.classList.add('header-tagline');
-	page.appendChild(headerTagline);
+// 	const headerTagline = document.createElement('p');
+// 	headerTagline.textContent = 'Books I have read and planned to read';
+// 	headerTagline.classList.add('header-tagline');
+// 	page.appendChild(headerTagline);
 
-	return element;
-}
+// 	return element;
+// }
 
-export const libraryElement = () => {
-	const element = document.createElement('main');
+// export const libraryElement = () => {
+// 	const element = document.createElement('main');
 
-	const page = document.createElement('div');
-	page.classList.add('page');
-	element.appendChild(page);
+// 	const page = document.createElement('div');
+// 	page.classList.add('page');
+// 	element.appendChild(page);
 
-	const addBookTile = document.createElement('div');
-	addBookTile.classList.add('tile', 'addButton');
-	addBookTile.textContent = '+';
-	page.appendChild(addBookTile);
+// 	const addBookTile = document.createElement('div');
+// 	addBookTile.classList.add('tile', 'addButton');
+// 	addBookTile.textContent = '+';
+// 	page.appendChild(addBookTile);
 
-	return element;
-}
+// 	return element;
+// }
 
-export const footerElement = () => {
-	const element = document.createElement('footer');
+// export const footerElement = () => {
+// 	const element = document.createElement('footer');
 
-	const page = document.createElement('div');
-	page.classList.add('page');
-	element.appendChild(page);
+// 	const page = document.createElement('div');
+// 	page.classList.add('page');
+// 	element.appendChild(page);
 
-	const authorWidget = document.createElement('div');
-	authorWidget.classList.add('author-widget');
+// 	const authorWidget = document.createElement('div');
+// 	authorWidget.classList.add('author-widget');
 
-	const authorTextElement = document.createElement('p');
-	authorTextElement.textContent = 'Created by ';
+// 	const authorTextElement = document.createElement('p');
+// 	authorTextElement.textContent = 'Created by ';
 
-	const authorLink = document.createElement('a');
-	const link = 'https://github.com/kenyachan';
-	const author = 'Kenya Chan';
-	authorLink.setAttribute('href', link);
-	authorLink.setAttribute('target', '_blank');
-	authorLink.setAttribute('rel', 'noopener noreferrer');
-	authorLink.textContent = author;
-	authorTextElement.appendChild(authorLink);
+// 	const authorLink = document.createElement('a');
+// 	const link = 'https://github.com/kenyachan';
+// 	const author = 'Kenya Chan';
+// 	authorLink.setAttribute('href', link);
+// 	authorLink.setAttribute('target', '_blank');
+// 	authorLink.setAttribute('rel', 'noopener noreferrer');
+// 	authorLink.textContent = author;
+// 	authorTextElement.appendChild(authorLink);
 
-	authorWidget.appendChild(authorTextElement);
+// 	authorWidget.appendChild(authorTextElement);
 
-	page.appendChild(authorWidget);
+// 	page.appendChild(authorWidget);
 
-	return element;
-}
+// 	return element;
+// }
 
 export const bookTileElement = (title, author, pageCount, read) => {
 	const element = document.createElement('div');
@@ -86,152 +86,152 @@ export const bookTileElement = (title, author, pageCount, read) => {
 	return element;
 }
 
-export const modifyBookModal = (type) => {
-	const modalWidget = document.createElement('div');
-	modalWidget.classList.add('modal-widget');
+// export const modifyBookModal = (type) => {
+// 	const modal = document.createElement('dialog');
+// 	modal.classList.add('modal-widget');
 
-	modalWidget.appendChild(modalOverlay());
-	modalWidget.appendChild(modalDialog(type));
+// 	// modal.appendChild(modalOverlay());
+// 	modal.appendChild(modalDialog(type));
 
-	function modalOverlay() {
-		const overlay = document.createElement('div');
-		overlay.classList.add('overlay');
+// 	// function modalOverlay() {
+// 	// 	const overlay = document.createElement('div');
+// 	// 	overlay.classList.add('overlay');
 
-		return overlay;
-	}
+// 	// 	return overlay;
+// 	// }
 
-	function modalDialog(type) {
-		let modalTitleText;
+// 	// function modalDialog(type) {
+// 	// 	let modalTitleText;
 
-		if (type === 'add')
-			modalTitleText = 'Add a book';
+// 	// 	if (type === 'add')
+// 	// 		modalTitleText = 'Add a book';
 
-		if (type === 'update')
-			modalTitleText = "Update book's details";
+// 	// 	if (type === 'update')
+// 	// 		modalTitleText = "Update book's details";
 
-		const modalDialog = document.createElement('div');
-		modalDialog.classList.add('modal-dialog');
+// 	// 	const modalDialog = document.createElement('div');
+// 	// 	modalDialog.classList.add('modal-dialog');
 
-		// dialog stuff here
-		const modalTitle = document.createElement('p');
-		modalTitle.classList.add('dialog', 'title');
-		modalTitle.textContent = modalTitleText;
-		modalDialog.appendChild(modalTitle);
+// 	// 	// dialog stuff here
+// 	// 	const modalTitle = document.createElement('p');
+// 	// 	modalTitle.classList.add('dialog', 'title');
+// 	// 	modalTitle.textContent = modalTitleText;
+// 	// 	modalDialog.appendChild(modalTitle);
 
-		const addBookForm = document.createElement('form');
-		modalDialog.appendChild(addBookForm);
+// 	// 	const addBookForm = document.createElement('form');
+// 	// 	modalDialog.appendChild(addBookForm);
 
-		addBookForm.appendChild(createBookTitleInput());
-		addBookForm.appendChild(createAuthorInput());
-		addBookForm.appendChild(createPageCountInput());
-		addBookForm.appendChild(readSwitchWidget());
+// 	// 	addBookForm.appendChild(createBookTitleInput());
+// 	// 	addBookForm.appendChild(createAuthorInput());
+// 	// 	addBookForm.appendChild(createPageCountInput());
+// 	// 	addBookForm.appendChild(readSwitchWidget());
 
-		addBookForm.appendChild(createSubmitButton(type));
-		addBookForm.appendChild(createCancelButton());
-		if (type === 'update')
-			addBookForm.appendChild(createRemoveButton());
+// 	// 	addBookForm.appendChild(createSubmitButton(type));
+// 	// 	addBookForm.appendChild(createCancelButton());
+// 	// 	if (type === 'update')
+// 	// 		addBookForm.appendChild(createRemoveButton());
 		
-		return modalDialog;
-	}
+// 	// 	return modalDialog;
+// 	// }
 
-	function createBookTitleInput() {
-		const element = document.createElement('div');
-		element.classList.add('inputItem');
+// 	// function createBookTitleInput() {
+// 	// 	const element = document.createElement('div');
+// 	// 	element.classList.add('inputItem');
 
-		const label = document.createElement('label');
-		label.setAttribute('for', 'bookTitle');
-		label.textContent = 'Title: ';
-		element.appendChild(label);
+// 	// 	const label = document.createElement('label');
+// 	// 	label.setAttribute('for', 'bookTitle');
+// 	// 	label.textContent = 'Title: ';
+// 	// 	element.appendChild(label);
 
-		const input = document.createElement('input');
-		input.setAttribute('type', 'text');
-		input.setAttribute('name', 'bookTitle');
-		input.setAttribute('placeholder', "Harry Potter and the Philisopher's Stone");
-		input.id = 'bookTitle';
-		input.required = true;
-		element.appendChild(input);
+// 	// 	const input = document.createElement('input');
+// 	// 	input.setAttribute('type', 'text');
+// 	// 	input.setAttribute('name', 'bookTitle');
+// 	// 	input.setAttribute('placeholder', "Harry Potter and the Philisopher's Stone");
+// 	// 	input.id = 'bookTitle';
+// 	// 	input.required = true;
+// 	// 	element.appendChild(input);
 
-		return element;
-	}
+// 	// 	return element;
+// 	// }
 
-	function createAuthorInput() {
-		const element = document.createElement('div');
-		element.classList.add('inputItem');
+// 	// function createAuthorInput() {
+// 	// 	const element = document.createElement('div');
+// 	// 	element.classList.add('inputItem');
 
-		const label = document.createElement('label');
-		label.setAttribute('for', 'bookAuthor');
-		label.textContent = 'Author: ';
-		element.appendChild(label);
+// 	// 	const label = document.createElement('label');
+// 	// 	label.setAttribute('for', 'bookAuthor');
+// 	// 	label.textContent = 'Author: ';
+// 	// 	element.appendChild(label);
 
-		const input = document.createElement('input');
-		input.setAttribute('type', 'text');
-		input.setAttribute('name', 'bookAuthor');
-		input.setAttribute('placeholder', 'J.K Rowling');
-		input.id = 'bookAuthor';
-		input.required = true;
-		input.setAttribute('pattern', '[^0-9]+');
-		element.appendChild(input);
+// 	// 	const input = document.createElement('input');
+// 	// 	input.setAttribute('type', 'text');
+// 	// 	input.setAttribute('name', 'bookAuthor');
+// 	// 	input.setAttribute('placeholder', 'J.K Rowling');
+// 	// 	input.id = 'bookAuthor';
+// 	// 	input.required = true;
+// 	// 	input.setAttribute('pattern', '[^0-9]+');
+// 	// 	element.appendChild(input);
 
-		return element;
-	}
+// 	// 	return element;
+// 	// }
 
-	function createPageCountInput() {
-		const element = document.createElement('div');
-		element.classList.add('inputItem');
+// 	// function createPageCountInput() {
+// 	// 	const element = document.createElement('div');
+// 	// 	element.classList.add('inputItem');
 
-		const label = document.createElement('label');
-		label.setAttribute('for', 'bookPageCount');
-		label.textContent = 'Page Count: ';
-		element.appendChild(label);
+// 	// 	const label = document.createElement('label');
+// 	// 	label.setAttribute('for', 'bookPageCount');
+// 	// 	label.textContent = 'Page Count: ';
+// 	// 	element.appendChild(label);
 
-		const input = document.createElement('input');
-		input.setAttribute('type', 'number');
-		input.setAttribute('name', 'bookPageCount');
-		input.setAttribute('placeholder', '256');
-		input.setAttribute('min', '1');
-		input.id = 'bookPageCount';
-		input.required = 'required';
-		element.appendChild(input);
+// 	// 	const input = document.createElement('input');
+// 	// 	input.setAttribute('type', 'number');
+// 	// 	input.setAttribute('name', 'bookPageCount');
+// 	// 	input.setAttribute('placeholder', '256');
+// 	// 	input.setAttribute('min', '1');
+// 	// 	input.id = 'bookPageCount';
+// 	// 	input.required = 'required';
+// 	// 	element.appendChild(input);
 
-		return element;
-	}
+// 	// 	return element;
+// 	// }
 
-	function createSubmitButton(type) {
-		const button = document.createElement('button');
-		button.setAttribute('type', 'submit');
-		button.id = 'modal-addBook';
+// 	// function createSubmitButton(type) {
+// 	// 	const button = document.createElement('button');
+// 	// 	button.setAttribute('type', 'submit');
+// 	// 	button.id = 'modal-addBook';
 
-		if (type === 'add') {
-			button.textContent = 'Add';
-		}
+// 	// 	if (type === 'add') {
+// 	// 		button.textContent = 'Add';
+// 	// 	}
 
-		if (type === 'update') {
-			button.textContent = 'Update';
-		}
+// 	// 	if (type === 'update') {
+// 	// 		button.textContent = 'Update';
+// 	// 	}
 
-		return button;
-	}
+// 	// 	return button;
+// 	// }
 
-	function createCancelButton() {
-		const button = document.createElement('button');
-		button.setAttribute('type', 'button');
-		button.id = 'modal-cancel';
-		button.textContent = 'Cancel';
+// 	// function createCancelButton() {
+// 	// 	const button = document.createElement('button');
+// 	// 	button.setAttribute('type', 'button');
+// 	// 	button.id = 'modal-cancel';
+// 	// 	button.textContent = 'Cancel';
 		
-		return button;
-	}
+// 	// 	return button;
+// 	// }
 
-	function createRemoveButton() {
-		const button = document.createElement('button');
-		button.setAttribute('type', 'button');
-		button.id = 'modal-removeBook';
-		button.textContent = 'Remove';
+// 	// function createRemoveButton() {
+// 	// 	const button = document.createElement('button');
+// 	// 	button.setAttribute('type', 'button');
+// 	// 	button.id = 'modal-removeBook';
+// 	// 	button.textContent = 'Remove';
 
-		return button;
-	}
+// 	// 	return button;
+// 	// }
 
-	return modalWidget;
-}
+// 	// return modal;
+// }
 
 const readSwitchWidget = (switchState) => {
 	const switchWidget = document.createElement('div');

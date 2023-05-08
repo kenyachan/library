@@ -13,7 +13,35 @@
             <p class="header-tagline">Books I have read and planned to read</p>
         </div>
     </header>
-    <main></main>
+    <main>
+        <div class="page" id="libraryList">
+            <div class="tile addButton">+</div>
+        </div>
+        <dialog class="modal">
+            <p id="modal-title"></p>
+            <form method="dialog">
+                <div class="inputItem">
+                    <label for="titleInput">Title</label>
+                    <input type="text" name="bookTitle" placeholder="Harry Potter and the Philosopher's Stone" id="titleInput" required>
+                </div>
+                <div class="inputItem">
+                    <label for="authorInput">Author</label>
+                    <input type="text" name="bookAuthor" placeholder="J.K Rowling" id="authorInput" required pattern="[^0-9]+">
+                </div>
+                <div class="inputItem">
+                    <label for="pageCountInput">PageCount</label>
+                    <input type="number" name="bookPageCount" placeholder="256" min="1" id="pageCountInput" required>
+                </div>
+                <div class="switch-widget">
+                    <input type="checkbox" name="bookRead">
+                    <label>
+                        <span class="on">Read</span>
+                        <span class="off">Not read</span>
+                    </label>
+                </div>
+            </form>
+        </dialog>
+    </main>
     <footer>
         <div class="page">
             <div class="author-widget">

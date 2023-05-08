@@ -1,14 +1,12 @@
-import * as create from './modules/elements';
+import { newBookTile } from './modules/bookTile';
 import { book } from './modules/book';
+import { newAddModalButtons, newUpdateModalButtons } from './modules/modal';
 
 export const screenController = (application) => {
 	const library = application;
-	const mainElement = document.querySelector('main');
-	const bodyElement = document.querySelector('body');
 
-	const main = (() => {
-		const libraryElement = create.libraryElement();
-		mainElement.replaceWith(libraryElement);
+	const libraryList = (() => {
+		const libraryElement = document.querySelector('#libraryList');
 
 		const addBookButton = libraryElement.querySelector('.tile.addButton');
 		addBookButton.addEventListener('click', e => openModal());
@@ -19,17 +17,28 @@ export const screenController = (application) => {
 		});
 
 		function createBookTile(book) {
-			let bookTile = create.bookTileElement(book.title, book.author, book.pageCount, book.read);
+			let bookTile = newBookTile();
+
+			const tileTitle = bookTile.querySelector('.tile-title');
+			const tileAuthor = bookTile.querySelector('.tile-author');
+			const tilePageCount = bookTile.querySelector('.tile-pageCount');
+			const tileReadState = bookTile.querySelector('input[type="checkbox"]');
+
+			tileTitle.textContent = book.title;
+			tileAuthor.textContent = book.author;
+			tilePageCount.textContent = book.pageCount;
+			tileReadState.checked = book.read;
+
 			bookTile.addEventListener('click', e => openModal(book, bookTile));
 
-			let readSwitch = bookTile.querySelector('.switch-widget input[name="readBook"]');
+			let readSwitch = bookTile.querySelector('.switch-widget input[name="bookRead"]');
 			readSwitch.addEventListener('click', e => e.stopPropagation());
-			readSwitch.addEventListener('change', e => toggleRead(e, book, bookTile));
+			readSwitch.addEventListener('change', e => toggleRead(e, book));
 
 			return bookTile;
 		}
 
-		function toggleRead(e, bookObj, bookTile) {
+		function toggleRead(e, bookObj) {
 			let bookDelta = book();
 			bookDelta.read = e.currentTarget.checked;
 			library.update(bookObj, bookDelta);
@@ -38,42 +47,72 @@ export const screenController = (application) => {
 		}
 
 		function insertBookTile(bookTile) {
-			const pageElement = libraryElement.querySelector('.page');
-			pageElement.insertBefore(bookTile, addBookButton);
+			libraryElement.insertBefore(bookTile, addBookButton);
 		}
 
-		function openModal(book, bookTile) {
-			let type = book === undefined ? 'add' : 'update';
+		function openModal(bookObj, bookTile) {
+			const modalDialog = document.querySelector('.modal');
+			const modalDialogTitle = modalDialog.querySelector('#modal-title');
+			const modalDialogForm = modalDialog.querySelector('.modal form');
 			
-			const modalElement = create.modifyBookModal(type);
-			bodyElement.appendChild(modalElement);
+			addModalButtons(bookObj, modalDialogForm);
+			initialiseCancelButton(modalDialogForm);
+			
+			if (bookObj !== undefined) {	// update book
+				modalDialogTitle.textContent = 'Update Book';
+				populateFormInputs(bookObj, modalDialogForm);
 
-			document.addEventListener('keydown', e => {
-				if (event.key === 'Escape')
+				initialiseRemoveButton(modalDialog, bookObj, bookTile);
+
+				modalDialogForm.addEventListener('submit', e => {
+					let bookDelta = updateBookObj(modalDialogForm, bookObj);
+					library.update(bookObj, bookDelta);
+	
+					let updatedBookTile = createBookTile(bookObj);
+					bookTile.replaceWith(updatedBookTile);
+	
 					closeModal();
-			}, { once: true });
+				});
+			} else {	// add book
+				modalDialogTitle.textContent = 'Add Book';
+				populateFormInputs(book('',''), modalDialogForm);
 
-			initialiseOverlay(modalElement);
-
-			const form = modalElement.querySelector('form');
-			initialiseCancelButton(form);
-			
-			if (type === 'add')	initialiseAddForm(form);
-			if (type === 'update') {
-				initialiseRemoveButton(form, book, bookTile);
-				initialiseUpdateForm(form, book, bookTile);
+				modalDialogForm.addEventListener('submit', e => {
+					addBook(modalDialogForm);
+					closeModal();
+				});
 			}
 
-			return modalElement;
+			modalDialog.showModal();
 		}
 
-		function initialiseOverlay(modalElement) {
-			const overlay = modalElement.querySelector('.overlay');
-			overlay.addEventListener('click', e => closeModal());
+		function addModalButtons(bookObj, form) {
+			const modalButtonsContainer = form.querySelector('#modal-buttons');
+
+			if (bookObj === undefined) {
+				modalButtonsContainer === null ? form.appendChild(newAddModalButtons()): modalButtonsContainer.replaceWith(newAddModalButtons());
+			} else {
+				modalButtonsContainer === null ? form.appendChild(newUpdateModalButtons()): modalButtonsContainer.replaceWith(newUpdateModalButtons());
+			}
+		}
+
+		function populateFormInputs(bookObj, form) {
+			const titleInput = form.querySelector('input[name="bookTitle"]');
+			const authorInput = form.querySelector('input[name="bookAuthor"]');
+			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
+			const readStatusCheckBox = form.querySelector('input[name="bookRead"]');
+
+			titleInput.value = bookObj.title;
+			authorInput.value = bookObj.author;
+			pageCountInput.value = bookObj.pageCount;
+			readStatusCheckBox.checked = bookObj.read;
+
+			addValidationMessages(form);
 		}
 
 		function initialiseRemoveButton(modalElement, book, bookTile) {
 			const removeButton = modalElement.querySelector('#modal-removeBook');
+
 
 			removeButton.addEventListener('click', e => {
 				library.remove(book);
@@ -87,25 +126,11 @@ export const screenController = (application) => {
 			cancelButton.addEventListener('click', e => closeModal());
 		}
 
-		function initialiseAddForm(form) {
-			const titleInput = form.querySelector('input[name="bookTitle"]');
-
-			addValidationMessages(form);
-			titleInput.focus();
-
-			form.addEventListener('submit', e => {
-				e.preventDefault(); // stop submit action
-
-				addBook(form);
-				closeModal();
-			});
-		}
-
 		function addBook(form) {
 			const titleInput = form.querySelector('input[name="bookTitle"]');
 			const authorInput = form.querySelector('input[name="bookAuthor"]');
 			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
-			const readStatusCheckBox = form.querySelector('input[name="readBook"]');
+			const readStatusCheckBox = form.querySelector('input[name="bookRead"]');
 
 			let newBook = book(titleInput.value, authorInput.value, parseInt(pageCountInput.value), readStatusCheckBox.checked);
 			library.add(newBook);
@@ -113,38 +138,12 @@ export const screenController = (application) => {
 			let newBookTile = createBookTile(newBook);
 			insertBookTile(newBookTile);
 		}
-
-		function initialiseUpdateForm(form, bookObj, bookTile) {
-			const titleInput = form.querySelector('input[name="bookTitle"]');
-			const authorInput = form.querySelector('input[name="bookAuthor"]');
-			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
-			const readStatusCheckBox = form.querySelector('input[name="readBook"]');
-
-			titleInput.value = bookObj.title;
-			authorInput.value = bookObj.author;
-			pageCountInput.value = bookObj.pageCount;
-			readStatusCheckBox.checked = bookObj.read;
-
-			addValidationMessages(form);
-
-			form.addEventListener('submit', e => {
-				e.preventDefault();
-				
-				let bookDelta = updateBookObj(form, bookObj);
-				library.update(bookObj, bookDelta);
-
-				let updatedBookTile = createBookTile(bookObj);
-				bookTile.replaceWith(updatedBookTile);
-
-				closeModal();
-			});
-		}
 		
 		function updateBookObj(form, bookObj) {
 			const titleInput = form.querySelector('input[name="bookTitle"]');
 			const authorInput = form.querySelector('input[name="bookAuthor"]');
 			const pageCountInput = form.querySelector('input[name="bookPageCount"]');
-			const readStatusCheckBox = form.querySelector('input[name="readBook"]');
+			const readStatusCheckBox = form.querySelector('input[name="bookRead"]');
 
 			const bookDelta = book();
 			
@@ -214,9 +213,9 @@ export const screenController = (application) => {
 		}
 
 		function closeModal() {
-			const modalElement = bodyElement.querySelector('.modal-widget');
+			const modalDialog = document.querySelector('.modal');
 
-			if (modalElement) modalElement.remove();
+			modalDialog.close();
 		}
 	})();
 }

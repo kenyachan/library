@@ -43,7 +43,7 @@ export function book(title, author, pageCount, read) {
 			}
 
 			if (newPageCount < 0)  {
-				throw new Error(`Page Count invalid. Expected positive number, recieved ${newPageCount}`);
+				throw new Error(`Page Count invalid. Expected positive number, received ${newPageCount}`);
 				return;
 			}
 

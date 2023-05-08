@@ -1,4 +1,3 @@
-import { book as newBook } from './modules/book';
 import * as storage from './modules/storage';
 
 //app controller
