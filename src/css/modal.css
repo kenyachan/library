@@ -1,12 +1,11 @@
-/* MODAL WIDGET */
 .modal {
 	margin: auto;
 	border: none;
-	border-radius: 10px;
-	padding: 1.5rem 2rem;
-	box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-	
-	width: 500px;
+	border-radius: 18px;
+	padding: 2rem;
+	box-shadow: 2px 4px 12px #00000014;
+
+	width: 275px;
 }
 
 .modal::backdrop {
@@ -14,68 +13,39 @@
 }
 
 #modal-title {
-	font-size: 1.5rem;
+	margin-bottom: 1rem;
+
 	font-weight: bold;
 }
 
 .modal form {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	gap: 1rem;
 }
 
-.modal .inputItem {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.inputItem input {
-	width: 60%;
+.modal input[type="text"] {
 	height: 2rem;
-
-	font-size: 1rem;
-	padding: 5px;
 	border: none;
-	border-bottom: 2px solid var(--color-purple);
-	transition: border-bottom 250ms ease-in-out;
+	border-bottom: 2px solid lightgrey;
+	transition: border-bottom .25s ease-in-out;
+
 	text-overflow: ellipsis;
 	outline: none;
-
-	/* -moz-appearance: textfield; */
+	padding: 5px;
 }
 
-.inputItem input:focus {
-	border-bottom: 2px solid var(--color-fushia);
+.modal input[type="text"]:focus {
+	border-bottom: 2px solid orange;
 }
 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
+.modal button {
+	width: 80px;
+
+	align-self: center;
 }
 
-#modal-buttons {
-	display: flex;
-	justify-content: space-evenly;
+.modal button:hover {
+	background-color: orange;
+	color: whitesmoke;	
 }
-
-button {
-	min-width: 100px;
-	padding: 0.5rem;
-	border-radius: 10px;
-	background-color: var(--color-purple);
-	border-color: var(--color-purple);
-}
-
-button:hover {
-	border-color: var(--color-fushia);
-}
-
-button {
-	font-size: 1rem;
-	color: whitesmoke;
-}
-
-/* END - MODAL WIDGET */

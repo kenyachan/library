@@ -1,12 +1,14 @@
 import './css/style.css';
+import './css/switch.css';
 import './css/tile.css';
 import './css/modal.css';
-import { screenController } from './screenController';
-import { library } from './app';
-import { createTestData } from './testData';
 
-let app = library();
-//createTestData(app);
+import { Book } from './app/book.js';
+import { Library } from './app/library.js';
+import { BookGenerator } from './app/bookGenerator.js';
+import { ScreenController } from './ui/screenController.js';
 
-let sc = screenController(app);
+const library = new Library();
+//BookGenerator.generateBooks(library);
 
+const screenController = new ScreenController(library);

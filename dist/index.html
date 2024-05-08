@@ -2,52 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Library</title>
+    <title>Project - Library</title>
 <script defer src="runtime.bundle.js"></script><script defer src="main.bundle.js"></script></head>
 <body>
     <header>
-        <div class="page">
-            <p class="header-title">My Library</p>
-            <p class="header-tagline">Books I have read and planned to read</p>
-        </div>
+        <p class="title">The Odin Library</p>
+		<div id="icon-container"></div>
     </header>
     <main>
-        <div class="page" id="libraryList">
-            <div class="tile addButton">+</div>
-        </div>
+        <div id="library" class="center"></div>
+        <button id="open-modal-btn">Add Book</button>
         <dialog class="modal">
-            <p id="modal-title"></p>
-            <form method="dialog">
-                <div class="inputItem">
-                    <label for="titleInput">Title</label>
-                    <input type="text" name="bookTitle" placeholder="Harry Potter and the Philosopher's Stone" id="titleInput" required>
+            <p id="modal-title">Add Book</p>
+            <form id="new-book-form" method="dialog">
+                <input type="text" name="title" id="book-title" placeholder="Title">
+                <input type="text" name="author" id="book-author" placeholder="Author">
+                <input type="text" name="pages" id="book-pages" placeholder="Number of pages">
+                <div>
+                    <label for="book-read">Have you read it?</label>
+                    <input type="checkbox" name="read" id="book-read">
                 </div>
-                <div class="inputItem">
-                    <label for="authorInput">Author</label>
-                    <input type="text" name="bookAuthor" placeholder="J.K Rowling" id="authorInput" required pattern="[^0-9]+">
-                </div>
-                <div class="inputItem">
-                    <label for="pageCountInput">PageCount</label>
-                    <input type="number" name="bookPageCount" placeholder="256" min="1" id="pageCountInput" required>
-                </div>
-                <div class="switch-widget">
-                    <input type="checkbox" name="bookRead">
-                    <label>
-                        <span class="on">Read</span>
-                        <span class="off">Not read</span>
-                    </label>
-                </div>
+                <button type="submit" id="add-book-btn">Add</button>
+                <button type="reset" id="close-modal-btn">Cancel</button>
+                
             </form>
         </dialog>
     </main>
     <footer>
-        <div class="page">
-            <div class="author-widget">
-                <p>Created by <a href="https://github.com/kenyachan/">Kenya Chan</a></p>
-            </div>
-        </div>
+		<p>By <a href="https://github.com/kenyachan">Kenya Chan</a></p>
     </footer>
 </body>
 </html>
