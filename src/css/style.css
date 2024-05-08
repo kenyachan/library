@@ -61,8 +61,21 @@ header {
 }
 
 footer {
-	padding: 3rem 4rem;
+	padding: 2rem 4rem;
 	border-top: 1px solid lightgrey;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#attributions {
+	display: flex;
+	flex-direction: column;
+}
+
+#attributions p {
+	font-weight: bold;
 }
 
 .title {
